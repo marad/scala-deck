@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=1024, user-scalable=no">
+
+    <title>Scala &amp; ScalaTest</title>
+
+    <!-- Required stylesheet -->
+    <link rel="stylesheet" href="core/deck.core.css">
+
+    <!-- Extension CSS files go here. Remove or add as needed. -->
+    <link href='http://fonts.googleapis.com/css?family=Source+Code+Pro' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="dependencies/bootstrap.min.css">
+    <link rel="stylesheet" href="dependencies/sh_ide-eclipse.min.css">
+    <link rel="stylesheet" media="screen" href="extensions/goto/deck.goto.css">
+    <link rel="stylesheet" media="screen" href="extensions/menu/deck.menu.css">
+    <link rel="stylesheet" media="screen" href="extensions/navigation/deck.navigation.css">
+    <link rel="stylesheet" media="screen" href="extensions/status/deck.status.css">
+    <link rel="stylesheet" media="screen" href="extensions/scale/deck.scale.css">
+
+    <!-- Style theme. More available in /themes/style/ or create your own. -->
+    <link rel="stylesheet" media="screen" href="themes/style/swiss.css">
+
+    <!-- Transition theme. More available in /themes/transition/ or create your own. -->
+    <link rel="stylesheet" media="screen" href="themes/transition/horizontal-slide.css">
+    <!-- <link rel="stylesheet" media="screen" href="themes/transition/fade.css"> -->
+
+    <!-- Basic black and white print styles -->
+    <link rel="stylesheet" media="print" href="core/print.css">
+
+    <!-- Required Modernizr file -->
+    <script src="modernizr.custom.js"></script>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="dependencies/sh_main.min.js"></script>
+    <script src="dependencies/sh_scala.min.js"></script>
+    <script src="dependencies/sh_java.min.js"></script>
+    <script src="dependencies/sh_python.min.js"></script>
+    <script src="dependencies/jquery-1.11.2.min.js"></script>
+    <script src="dependencies/jquery-migrate-1.2.1.min.js"></script>
+
+    <script>
+    $(function() {
+      $("pre").attr("contenteditable", true);
+    });
+    </script>
+
+    <style>
+    pre {
+      font-family: "Source Code Pro";
+      background-color: #eee !important;
+    }
+
+    code {
+      color: hsl(0, 80%, 60%);
+      padding: 5px;
+      border-radius: 5px;
+    }
+    .slide .deck-previous.nogray {
+      opacity: 1;
+    }
+    </style>
+  </head>
+  <body onload="sh_highlightDocument();">
+    <div class="deck-container">
+
+      <!-- Begin slides. Just make elements with a class of slide. -->
+
+      <section class="slide">
+        <h1>Scala</h1>
+      </section>
+
+      <secion class="slide">
+      <h2>Dlaczego w ogóle Scala?</h2>
+      <p>James Strachan - twórca Groovy - napisał na swoim blogu:</p>
+      <blockquote>
+        I can honestly say if someone had shown me the <i>Programming in Scala</i> book [...] back in 2003 <b>I'd probably have never created Groovy</b>.
+      </blockquote>
+
+      <p><a href="http://macstrac.blogspot.com/2009/04/scala-as-long-term-replacement-for.html">Cały post blogu autora</a></p>
+      </secion>
+
+      <secion class="slide">
+      <h2>
+        Powody?
+      </h2>
+      <p>
+      Podał też powody dla których tak napisał:
+      <ul>
+        <li>Statyczne typowanie</li>
+        <li>Inferencja typów (Scala FTW!)</li>
+        <li>Kompilowane do bytecodu = szybkość porównywalna z Javą</li>
+        <li>Kodowanie funkcyjne</li>
+        <li>domknięcia (lambdy, closury, ...)</li>
+        <li>funkcje wyższego rzędu</li>
+        <li>traity/mixiny</li>
+        <li>DSLe</li>
+        <li><b>pattern matching</b></li>
+      </ul>
+      </p>
+      </secion>
+
+      <section class="slide">
+        <h2>Coś na start</h2>
+        <pre class="sh_scala">object MainApp {
+  def main(args: Array[String]) = {
+    println("HELLO WORLD")
+  }
+}</pre>
+
+        <ul>
+          <li>Definiowanie typów: <code class="sh_scala">obiekt: TypObiektu</code></li>
+          <li><code class="sh_scala">object</code> jest czymś w stylu statycznej klasy</li>
+          <li>Co zwraca metoda <code class="sh_scala">main</code>?</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h2>Wszysto jest obiektem</h2>
+
+        <pre class="sh_scala">1 + 2 * 3 / 7</pre>
+        <p>To jest to samo co:</p>
+        <pre class="sh_scala">1.+(2.*(3))./(7)</pre>
+        <p>Dzięki temu (i kilku innym ciekawostkom ;)) można pisać takie DSLe:</p>
+        <pre class="sh_scala">1.second
+1 second</pre>
+      </section>
+
+      <section class="slide">
+        <h2>Podstawowe typy</h2>
+
+        <ul>
+          <li><code>Int</code>, <code>Long</code>, <code>String</code>, <code>Double</code>, <code>Float</code></li>
+          <li>Brak małych typów (<code>int</code>, <code>long</code>, <code>double</code>, <code>float</code>)</li>
+          <li>Nie używa się typu <code>Integer</code></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h2>Inferencja typów</h2>
+
+        <pre class="sh_scala">val całkowita: Int = 1
+val zmiennoprzecinkowa: Double = 2.0
+val ciągZnaków: String = "hello world"</pre>
+
+        <div class="slide">
+          <p>Można też po prostu:</p>
+          <pre class="sh_scala">val całkowita = 1
+val zmiennoprzecinkowa = 2.0
+val ciągZnaków = "hello world"</pre>
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>Inferencja typów</h2>
+
+        <p>Typ obiektu zwracanego przez metodę też jest inferowany</p>
+        <pre class="sh_scala">def hello(name: String) = "Hello, " + name</pre>
+        <div class="slide">
+          <p>Ale czasem lepiej napisać typ bezpośrednio:<p>
+          <pre class="sh_scala">def fun(a: Int) = {
+  if (a &gt; 5) a + 2
+  else a - 2.5
+} // jaki jest typ zwracanego wyniku?</pre>
+        </div>
+        <div class="slide">
+          <pre class="sh_scala">def fun(a: Int): Int = {
+  if (a &gt; 5) a + 2
+  else a - 2.5
+} // błąd kompilacji!</pre>
+        </div>
+      </section>
+
+      <section class="slide">
+          <h2>Zmienne, stałe, metody</h2>
+
+<pre class="sh_scala">var zmienna = 1
+val stała = 2
+def metoda = 3
+def metoda() = 4</pre>
+          <div class="slide">
+            <p>Można też inicjować blokami kodu</p>
+            <pre class="sh_scala">var zmienna = {
+  // ...
+}
+val stała = {
+  // ...
+}
+def metoda = {
+  // ...
+}
+def metoda(a: T) = {
+  // ...
+}</pre>
+          </div>
+      </section>
+
+      <section class="slide">
+          <h2>if</h2>
+          <p>
+            Poza standardową składnią trzeba zaznaczyć, że <code>if</code> jest wyrażeniem
+          </p>
+          <pre class="sh_scala">val a = if(x &gt; 2) 0 else 1</pre>
+          <p>
+            Dlatego nie ma w scali operatora <code>?</code>
+          </p>
+          <p>
+            Oczywiście większe bloki to też wyrażenia:
+          </p>
+          <pre class="sh_scala">val a = if (x &gt; 2) {
+  // ...
+  0
+} else {
+  // ...
+  1
+}</pre>
+      </section>
+
+      <section class="slide">
+        <h2>while, do...while</h2>
+
+        <p>
+          Tutaj nic specjalnego:
+        </p>
+        <h3>
+          while
+        </h3>
+        <pre class="sh_scala">while(condition) {
+  // ...
+}</pre>
+        <h3>
+          do...while
+        </h3>
+        <pre class="sh_scala">do {
+  // ...
+} while(condition)</pre>
+      </section>
+
+      <section class="slide">
+        <h2>for</h2>
+
+        <pre class="sh_scala">for(i &lt;- przedziałAlboKolekcja) {
+  // ...
+}</pre>
+        <pre class="sh_scala">for(i &lt;- 1 to 100) {...}</pre>
+        <pre class="sh_scala">for(i &lt;- List(1, 2, 3, 4)) {...}</pre>
+
+        <div class="slide">
+          <h3>yield</h3>
+          <p>
+            <code>for</code> też jest wyrażeniem:
+          </p>
+          <pre class="sh_scala">val a = for(i &lt;- 1 to 10) yield 2*i
+// Vector(2, 4, 6, 8, 10, 12, 14, 16, 18, 20)</pre>
+          <pre class="sh_scala">val a = for(i &lt;- 1 to 2; j &lt;- 1 to 2) yield (i, j)
+// Vector((1,1), (1,2), (2,1), (2,2))</pre>
+
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>for powah</h2>
+
+        <pre class="sh_scala">val a = for {
+  i &lt;- 1 to 10 if i % 2 == 0
+  j &lt;- 1 to 10 if j % i == 0
+  val result = i + j
+} yield result</pre>
+
+        <div class="slide">
+          <p>
+            Wygeneruje wszystkie pary <code>(i, j)</code> takie że:
+          </p>
+          <ul>
+            <li><code>i</code> jest parzyste</li>
+            <li><code>j</code> dzieli się przez <code>i</code></li>
+            <li><code>i</code> ∈ [1, 10], <code>j</code> ∈ [1, 10]</li>
+          </ul>
+          <p><code>
+            (2,2), (2,4), (2,6), (2,8), (2,10), (4,4), (4,8), (6,6), (8,8), (10,10)
+          </code></p>
+          <p>
+            Następnie stworzy listę sum tych par czyli:
+          </p>
+          <p>
+            <code>
+              4, 6, 8, 10, 12, 8, 12, 12, 16, 20
+            </code>
+          </p>
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>Object</h2>
+        <pre class="sh_scala">object Nazwa {
+  val hello = "world"
+  def greet(name: String) = s"Hello, $name!"
+}</pre>
+        <ul>
+          <li>w scali nie ma <code>static</code></li>
+          <li><code>object</code> definiuje singletonową instancję</li>
+        </ul>
+        <pre class="sh_scala">Nazwa.hello
+Nazwa.greet("all")</pre>
+
+        <div class="slide">
+          <h3>WARNING, ACHTUNG!</h3>
+          <p>Nie przesadzajcie z użyciem <code>object</code>ów bo testy!</p>
+          <p>Te same problemy co z użyciem <code>static</code> w Javie</p>
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>Klasy</h2>
+
+        <p>Najprostsza definicja klasy oraz klasy pochodnej</p>
+
+        <pre class="sh_scala">class Base
+class Impl extends Base</pre>
+      </section>
+
+      <section class="slide">
+          <h2>Klasy</h2>
+
+          <pre class="sh_scala">class Nazwa(a: Int = 2, val msg: String) {
+  private var c = 1f
+  val len = msg.length
+
+  def addOne(x: Int) = x + 1
+}</pre>
+          <div class="slide nogray">
+            <pre class="sh_scala">val instance = new Nazwa(7, "hello")
+instance.msg // OK
+instance.a   // BŁĄD! 'a' nie jest polem
+instance.c   // BŁĄD! 'c' jest polem prywatnym</pre>
+          </div>
+          <div class="slide">
+            <pre class="sh_scala">val instance = new Nazwa(msg="hello")</pre>
+          </div>
+      </section>
+
+      <section class="slide">
+        <h2>Companion Object</h2>
+
+        <p>
+          To <code>object</code>, który jest:
+          <ul>
+            <li>nazwany tak samo jak klasa</li>
+            <li>zdefiniowany w tym samym pliku co klasa</li>
+          </ul>
+        </p>
+
+        <pre class="sh_scala">class Something
+object Something {
+  // ...
+}</pre>
+
+        <p>Takie obiekty mają dostęp do <strong>prywatnych</strong> pól i metod powiązanej klasy</p>
+      </section>
+
+      <section class="slide">
+        <h2>Companion Object</h2>
+        <p>Najczęściej używane do definiowania metod tworzących instancję klasy (factory)</p>
+        <pre class="sh_scala">class Post(val id: Long,
+           val title: String,
+           val content: String)
+
+object Post {
+  def apply(id: Long, title: String, content: String) =
+    new Post(id, title, content)
+}</pre>
+        <p>Dzięki temu możemy napisać:</p>
+        <pre class="sh_scala">val post = Post(1, "Hello", "World")</pre>
+
+      </section>
+
+      <section class="slide">
+          <h2>Case classes</h2>
+          <pre class="sh_scala">case class Post(id: Long,
+                title: String,
+                content: String)</pre>
+          <ul>
+            <li>Pola są domyślnie publiczne (nie trzeba <code>val</code> w konstruktorze)</li>
+          </ul>
+
+          <div class="slide">
+            <pre class="sh_scala">val post = Post(1, "Hello", "Hello world")
+val id = post.id
+val changedPost = post.copy(content="Hello all")</pre>
+
+            <ul>
+              <li>Automatycznie generowany companion object</li>
+              <li>Wygenerowane metody <code>Post.apply(...)</code> i <code>Post.unapply(...)</code></li>
+              <li>Można ich używać do pattern matchingu</li>
+            </ul>
+          </div>
+      </section>
+
+      <section class="slide">
+          <h2>Pattern Matching</h2>
+
+          <p>
+            <h3>
+              Matchowanie po wartościach:
+            </h3>
+          </p>
+          <pre class="sh_scala">def showcase(input: Int) = input match {
+  case 1 =&gt; "Jeden"
+  case 2 =&gt; "Dwa"
+  case _ =&gt; "Inna!"
+}</pre>
+
+          <div class="slide">
+            <p>
+              <h3>
+                Matchowanie po typie:
+              </h3>
+            </p>
+            <pre class="sh_scala">sealed class Base
+class First extends Base
+class Second extends Base
+
+def showcase(input: Base) = input match {
+  case f: First =&gt; "Pierwsza"
+  case s: Second =&gt; "Druga"
+}</pre>
+          </div>
+      </section>
+
+      <section class="slide">
+        <h2>Pattern Matching - case classes</h2>
+        <pre class="sh_scala">def showcase(post: Post) = post match {
+  case Post(1, _, _) =&gt "post z id = 1"
+  case Post(_, title, _) =&gt title
+  case _ =&gt "whatevs"
+}</pre>
+        <div class="slide">
+          <p>
+            Jeśli chcemy matchować tylko jeden argument ale mieć cały post:
+            </p>
+          <pre class="sh_scala">def showcase(post: Post) = post match {
+  case p@Post(1, _, _) =&gt; p.content
+  // ...
+}</pre>
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>Pattern Matching - regex</h2>
+
+        <pre class="sh_scala">val date = """(\d\d\d\d)-(\d\d)-(\d\d)""".r
+"2014-03-01" match {
+  case date(year, month, day) =&gt; s"It's year $year"
+}</pre>
+
+        <div class="slide nogray">
+          <pre class="sh_scala">"2014-03-01" match {
+  case date(_*) =&gt; "It's a date!"
+}</pre>
+        </div>
+
+        <div class="slide">
+          <pre class="sh_scala">"2014-03-01" match {
+  case date(year, _*) =&gt; s"It's year $year"
+}</pre>
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>Pattern Matching - for</h2>
+        <p>
+          Matchowanie można też uprawiać wewnątrz pętli <code>for</code>:
+        </p>
+
+        <pre class="sh_scala">val posts = List(
+  Post(1, "Title 1", "Content 1"),
+  Post(2, "Title 2", "Content 2"),
+  Post(3, "Other Title", "Content 3"))
+
+for( p @ Post(1, _, _) &lt;- posts) {
+  // ...
+}</pre>
+        <div class="slide">
+          <h3>A z regexem?</h3>
+          <pre class="sh_scala">val pattern = "^Title.*".r
+for( p @ Post(_, pattern(), _) &lt;- posts) {
+  //...
+}</pre>
+          Wykona operacje tylko dla dwóch pierwszych postów.
+        </div>
+      </section>
+
+
+      <section class="slide">
+        <h2>Kolekcje</h2>
+
+        <p>
+          W scali mamy dostępne różne kolekcje:
+          <ul>
+            <li><code>Array()</code></li>
+            <li><code>List()</code></li>
+            <li><code>Vector()</code></li>
+            <li><code>Set()</code></li>
+          </ul>
+        </p>
+
+        <p><code>Seq[T]</code> jest interfejsem opisującym sekwencję</p>
+
+        <div class="slide nogray">
+          <pre class="sh_scala">val a: Seq[Int] = Seq(1, 2, 3)     // OK, a == List(1, 2, 3)
+val b: Seq[Int] = Array(1, 2, 3)   // OK
+val c: Seq[Int] = List(1, 2, 3)    // OK
+val d: Seq[Int] = Vector(1, 2, 3)  // OK
+val e: Seq[Int] = Set(1, 2, 3)     // BŁĄD! Set nie jest sekwencją</pre>
+        </div>
+
+        <div class="slide">
+          <h3>Czego użyć?</h3>
+          <a href="http://docs.scala-lang.org/overviews/collections/performance-characteristics.html" target="about:blank">
+            Scala's Collections Performance
+          </a>
+        </div>
+
+      </section>
+
+      <section class="slide">
+        <h2>Kolekcje</h2>
+        <pre class="sh_scala">(1 to 10).filter(_ % 2 == 0) // 2, 4, 6, 8, 10
+         .sortWith(_ &gt; _)    // 10, 8, 6, 4, 2
+         .map(_ / 2)         // 5, 4, 3, 2, 1
+         .reduce(_ + _)      // 15 (suma)</pre>
+
+        <div class="slide nogray">
+          <pre class="sh_scala">(1 to 10).filter({ i =&gt; i % 2 == 0 })
+         .map({ i =&gt; i / 2 })
+         .reduce({ (a, b) =&gt; a+b })</pre>
+        </div>
+
+        <div class="slide">
+          <pre class="sh_scala">(1 to 10).foreach(println)</pre>
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>Scala to Java</h2>
+        <pre class="sh_scala">import scala.collection.JavaConversions._</pre>
+
+        <div class="slide">
+          <pre class="sh_java">class JavaClass {
+  public void giveMeList(List&lt;Integer&gt; input) {
+    // ...
+  }
+}</pre>
+          <pre class="sh_scala">import scala.collection.JavaConversions._
+val a = new JavaClass()
+a.giveMeList(List(1, 2, 3))</pre>
+        </div>
+      </section>
+
+      <section class="slide">
+          <h2>Typ Option[T]</h2>
+          <h3>Nigdy więcej NullPointerException!</h3>
+          <p><code>Option[T]</code> ma (w dużym uproszczeniu) taką implementację:</p>
+          <pre class="sh_scala">sealed abstract class Option[T]
+case class Some[T](v: T) extends Option[T]
+case class None extends Option[scala.Nothing]</pre>
+
+          <div class="slide">
+            <h3>Pimp my Post</h3>
+            <pre class="sh_scala">case class Post(id: Option[Long],
+                title: String, content: String)
+
+val postWithId = Post(Some(1), "I have", "my id")
+val postWithoutId = Post(None, "And", "I don't")</pre>
+          </div>
+      </section>
+
+      <section class="slide">
+        <h2>Trait</h2>
+
+        <p>Pozwalają miksować funkcjonalność do klasy</p>
+
+        <pre class="sh_scala">trait Quacking {
+  def quack() = println("Quack!")
+}</pre>
+
+        <pre class="sh_scala">class Duck extends Quacking
+val duck = new Duck
+duck.quack()</pre>
+
+        <pre class="sh_scala">class Duck
+val duck = new Duck with Quacking
+duck.quack()</pre>
+      </section>
+
+      <section class="slide">
+        <h2>Trait - wymagania</h2>
+
+        <pre class="sh_scala">trait Greeter {
+  def name: String
+  def greet(otherName: String) =
+    s"Hello, $otherName! I'm $name"
+}</pre>
+
+        <div class="slide nogray">
+          <pre class="sh_scala">case class Person(name: String) extends Greeter
+val p = Person("Tom")
+p.greet("Bob") // "Hello, Bob! I'm Tom"</pre>
+        </div>
+
+        <div class="slide">
+          <ul>
+            <li><code>def</code> w <code>trait</code>'cie może być nadpisany przez <code>val</code> lub <code>var</code></li>
+            <li><code>val</code> w <code>trait</code>'cie wymaga <code>val</code>a w implementacji</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>Trait - wymagania inaczej</h2>
+        <pre class="sh_scala">trait PostsCrud { this: Controller with Secured =&gt;
+  def savePost = loggedIn {
+    // ...
+  }
+}</pre>
+
+        <a href="https://github.com/marad/blog/blob/master/app/controllers/blog/PostCrud.scala" target="about:blank">
+          Przykład z życia wzięty!
+        </a>
+
+      </section>
+
+      <section class="slide">
+        <h2>Who needs AOP?</h2>
+
+        <p>
+          Aspect Oriented Programming (AOP) wymyślono, żeby móc rozdzielić niezwiązane
+          ze sobą domenowo funkcje. (np. autoryzacja)
+        </p>
+
+        <div class="slide nogray">
+          <h3>W Scali AOP jest niepotrzebny!</h3>
+          <pre class="sh_scala">trait Secured {
+  def loggedIn(f : =&gt; Response) =
+    if (isUserLoggedIn) {
+      Ok(f)
+    } else {
+      Redirect("/not-authorized")
+    }
+}</pre>
+        </div>
+
+        <div class="slide">
+          <pre class="sh_scala">class Handler with Secured {
+  def handleRequest = loggedIn {
+    // ...
+  }
+}</pre>
+        </div>
+
+      </section>
+
+      <section class="slide">
+        <h2>Bonus: Duck Typing</h2>
+
+        <p>
+          Python
+        </p>
+        <pre class="sh_python">def giveMeDuck(duck):
+  duck.quack()</pre>
+
+
+        <div class="slide nogray">
+          <p>
+            Ale w Scali też można:
+          </p>
+          <pre class="sh_scala">def giveMeDuck[T &lt;: {def quack()}](duck: T) =
+  duck.quack()</pre>
+        </div>
+
+        <div class="slide nogray">
+          <pre class="sh_scala">class Duck {
+  def quack() = println("quack!")
+}
+
+class NotADuck {
+  def quack() = println("duck typing")
+}
+
+giveMeDuck(new Duck)
+giveMeDuck(new NotADuck)
+</pre>
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>Bonus: QuickSort</h2>
+        <pre class="sh_scala">def sort(xs: Array[Int]) {
+  def swap(i: Int, j: Int) {
+    val t = xs(i); xs(i) = xs(j); xs(j) = t
+  }
+
+  def sort1(l: Int, r: Int) {
+    val pivot = xs((l + r) / 2)
+    var i = l; var j = r
+    while (i &lt;= j) {
+      while (xs(i) &lt; pivot) i += 1
+      while (xs(j) &gt; pivot) j -= 1
+      if (i &lt;= j) {
+        swap(i, j)
+        i += 1
+        j -= 1
+      }
+    }
+    if (l &lt; j) sort1(l, j)
+    if (j &lt; r) sort1(i, r)
+  }
+
+  sort1(0, xs.length - 1)
+}</pre></section>
+
+      <section class="slide">
+        <h2>Bonus: QuickSort</h2>
+        <pre class="sh_scala">def sort(xs: Array[Int]): Array[Int] = {
+  if (xs.length &lt;= 1) xs
+  else {
+    val pivot = xs(xs.length / 2)
+    Array.concat(
+      sort(xs filter (pivot &gt;)),
+           xs filter (pivot ==),
+      sort(xs filter (pivot &lt;)))
+  }
+}</pre>
+      </section>
+
+      <section class="slide">
+        <h1>ScalaTest</h1>
+      </section>
+
+      <section class="slide">
+        <h2>Składnia testowania</h2>
+        <ul>
+          <li><b>FlatSpec</b></li>
+          <li><b>WordSpec</b></li>
+          <li>FunSuite</li>
+          <li>FunSpec</li>
+          <li>FreeSpec</li>
+          <li>Spec</li>
+          <li>PropSpec</li>
+          <li>FeatureSpec</li>
+        </ul>
+
+        <a href="http://www.scalatest.org/user_guide/selecting_a_style" target="about:blank">ScalaTest Doc</a>
+      </section>
+
+      <section class="slide">
+        <h2>Przygotowanie</h2>
+        <p>
+          Jeśli we wszystkich testach używamy jakichś konkretnych traitów to warto sobie ułatwić życie:
+        </p>
+
+        <pre class="sh_scala">import org.scalatest._
+abstract class UnitSpec extends FlatSpec
+    with Matchers
+    with MockitoSugar {
+  import org.mockito.Matchers._
+  import org.mockito.Mockito._
+}</pre>
+
+        <p>
+          Później tworząc test wystarczy:
+        </p>
+        <pre class="sh_scala">class MyTest extends UnitSpec {
+  // ...
+}
+</pre>
+      </section>
+
+      <section class="slide">
+        <h2>Podstawowe funkcje</h2>
+        <p>
+          Domyślnie w każdym traicie stylu testowania mamy kilka metod:
+        </p>
+
+        <ul>
+          <li>
+            <p>assert</p>
+            <pre class="sh_scala">assert(1 + 2 == 3)</pre>
+          </li>
+          <li>
+            <p>assertResult</p>
+            <pre class="sh_scala">assertResult(2) { 1 + 1 }</pre>
+          </li>
+          <li>
+            <p>intercept</p>
+            <pre class="sh_scala">intercept[Exception] { throw new Exception }</pre>
+          </li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h2>Podstawowe funkcje</h2>
+        <ul>
+          <li>
+            <p>fail - failuje test</p>
+          </li>
+          <li>
+            <p>cancel - anuluje test</p>
+          </li>
+          <li>
+            <p>assume - anuluje test jeśli warunek niespełniony</p>
+            <pre class="sh_scala">assume(db.isAvailable)</pre>
+          </li>
+        </ul>
+
+        <p>
+          Anulowany test nie jest uważany za failujący!
+        </p>
+      </section>
+
+      <section class="slide">
+        <h2>Matchers</h2>
+
+        <p>
+          Po zmiksowaniu traitu <code>Matchers</code> do naszego testu możemy już olać proste asercje
+          na rzecz czegoś bardziej cywilizowanego:
+        </p>
+        <pre class="sh_scala">(2 &gt; 5) shouldBe false
+(1 to 10) should have size 10
+"hello" should startWith regex "hell?"
+        </pre>
+
+        <a href="http://www.scalatest.org/user_guide/using_matchers" target="about:blank">Więcej tutaj!</a>
+      </section>
+
+      <section class="slide">
+        <h2>Tagowanie testów</h2>
+
+        <h3>Tworzenie tagów</h3>
+        <pre class="sh_scala">object SlowTest extends Tag("pl.allegro.tags.SlowTest")
+object DbTest extends Tag("pl.allegro.tags.DbTest")</pre>
+
+        <h3>Użycie tagów</h3>
+        <pre class="sh_scala">class ExampleSpec extends FlatSpec {
+  "This simple test" should "be slow" taggedAs(SlowTest) in { ... }
+
+  it should "use db" taggedAs(SlowTest, DbTest) in { ... }
+}</pre>
+
+        <p>
+          Dzięki temu możemy np. podczas uruchamiania kazać zignorować testy otagowane <code>SlowTest</code>.
+        </p>
+      </section>
+
+      <section class="slide">
+        <h2>Mockito</h2>
+
+        <p>Domyślnie mocki tworzy się analogicznie do Javy:</p>
+        <pre class="sh_scala">val myMock = mock(classOf[SomeClass])</pre>
+
+        <p>Po zmiksowaniu z traitem <code>MockitoSugar</code> mamy do dyspozycji coś takiego:</p>
+        <pre class="sh_scala">val myMock = mock[SomeClass]</pre>
+
+        <p>Reszta bez zmian:</p>
+        <pre class="sh_scala">when(myMock.func(any)) thenReturn 69
+verify(myMock, times(3)).func(5)</pre>
+      </section>
+
+      <section class="slide">
+        <h2>Table driven property checks</h2>
+
+        <pre class="sh_scala">class ExampleSpec extends FlatSpec with Matchers
+      with PropertyChecks {
+
+  val data = Table(
+    ("a", "b"), // nazwy kolumn
+    ( 1 ,  0 ), // dane
+    ( 2 ,  3 )
+  )
+
+  forAll (data) { (a: Int, b: Int) =&gt;
+    // ...
+  }
+}</pre>
+      </section>
+
+      <section class="slide">
+        <h2>Generator driven property checks</h2>
+
+        <pre class="sh_scala">class ExampleSpec extends FlatSpec with Matchers
+with PropertyChecks {
+  forAll { (a: Int, b: Int) =&gt;
+    whenever(a != 0 &amp;&amp; b &gt; 1) {
+      // ...
+    }
+  }
+}</pre>
+
+        <div class="slide">
+          <h3>Konfiguracja</h3>
+          <pre class="sh_scala">implicit override val generatorDrivenConfig =
+PropertyCheckConfig(
+  minSize = 0,
+  maxSize = 100,
+  minSuccessful = 100,
+  maxDiscarded = 500, // maks. liczba odrzuconych checków
+  workers = 1
+)</pre>
+        </div>
+      </section>
+
+      <section class="slide">
+        <h2>Selenium</h2>
+        <p>Wbudowany framework do testów browser-based:</p>
+        <pre class="sh_scala">class BlogSpec extends FlatSpec with Matchers with WebBrowser {
+  implicit val webDriver = new HtmlUnitDriver
+  val host = "http://localhost:8080"
+
+  "Blog home page" should "have the correct title" in {
+    go to (host + "/index.html")
+    pageTitle should be ("Awesome Blog")
+  }
+}</pre>
+
+        <a href="http://www.scalatest.org/user_guide/using_selenium" target="about:blank">Dokumentacja</a>
+      </section>
+
+      <section class="slide">
+        <h2>Materiały dodatkowe</h2>
+        <ul>
+          <li>
+            <a href="http://www.scala-lang.org/docu/files/ScalaTutorial.pdf">Scala for Java Programmers</a>
+          </li>
+          <li>
+            <a href="http://www.scala-lang.org/docu/files/ScalaByExample.pdf">Scala By Example</a>
+          </li>
+          <a href="scala-deck.zip">Ta prezentacja!</a>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h1>Koniec!</h1>
+      </section>
+
+      <!-- End slides. -->
+
+      <!-- Begin extension snippets. Add or remove as needed. -->
+
+      <!-- deck.navigation snippet -->
+      <div aria-role="navigation">
+        <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+        <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+      </div>
+
+      <!-- deck.status snippet -->
+      <p class="deck-status" aria-role="status">
+      <span class="deck-status-current"></span>
+      /
+      <span class="deck-status-total"></span>
+      </p>
+
+      <!-- deck.goto snippet -->
+      <form action="." method="get" class="goto-form">
+        <label for="goto-slide">Go to slide:</label>
+        <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+        <datalist id="goto-datalist"></datalist>
+        <input type="submit" value="Go">
+      </form>
+
+      <!-- End extension snippets. -->
+    </div>
+
+    <!-- Required JS files. -->
+    <script src="jquery.min.js"></script>
+    <script src="core/deck.core.js"></script>
+
+    <!-- Extension JS files. Add or remove as needed. -->
+    <script src="extensions/menu/deck.menu.js"></script>
+    <script src="extensions/goto/deck.goto.js"></script>
+    <script src="extensions/status/deck.status.js"></script>
+    <script src="extensions/navigation/deck.navigation.js"></script>
+    <script src="extensions/scale/deck.scale.js"></script>
+
+    <!-- Initialize the deck. You can put this in an external file if desired. -->
+    <script>
+$(function() {
+  $.deck('.slide');
+});
+    </script>
+  </body>
+</html>
